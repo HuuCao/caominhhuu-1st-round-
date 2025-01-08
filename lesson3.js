@@ -1,5 +1,4 @@
 const fs = require('fs');
-const zlib = require('zlib');
 
 fs.readFile('./data.json', 'utf8', (err, data) => {
     if (err) {
@@ -7,18 +6,13 @@ fs.readFile('./data.json', 'utf8', (err, data) => {
         return;
     }
 
-    zlib.gzip(data, (err, compressedData) => {
-        if (err) {
-            console.error('Error compressing data:', err);
-            return;
-        }   
+    const compressedData = JSON.stringify(JSON.parse(data));
 
-        fs.writeFile('./data.json.gz', compressedData, (err) => {
-            if (err) {
-                console.error('Error writing compressed file:', err);
-            } else {
-                console.log('File compressed successfully!');
-            }
-        });
+    fs.writeFile('./data_compressed.json', compressedData, (err) => {
+        if (err) {
+            console.error('Error writing compressed file:', err);
+        } else {
+            console.log('File compressed successfully!');
+        }
     });
 });
